@@ -1,0 +1,25 @@
+{
+  "name": "Agriculture Assistant",
+  "short_name": "AgriAssist",
+  "icons": [
+    {
+      "src": "/favicon/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#15803d",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/",
+  "description": "A platform connecting farmers and consumers",
+  "dir": "ltr",
+  "lang": "en",
+  "orientation": "any",
+  "categories": ["agriculture", "farming", "marketplace"]
+} 
