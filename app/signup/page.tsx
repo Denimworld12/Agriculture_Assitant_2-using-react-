@@ -117,7 +117,7 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!termsAccepted) {
+    if (userType === "farmer" && !termsAccepted) {
       setError("Please accept the terms and conditions")
       return
     }
@@ -125,17 +125,78 @@ export default function SignupPage() {
     setIsLoading(true)
 
     try {
-      // Mock signup
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
-      // Redirect based on user type
-      if (userType === "farmer") {
-        router.push("/farmer/dashboard")
-      } else {
-        router.push("/")
+      // Prepare user data
+      const userData = {
+        name: fullName,
+        email: email,
+        password: password,
+        phone: mobile,
+        address: address,
+        city: city,
+        state: state,
+        pincode: pincode,
+        // Use standard database roles that likely match the ENUM in database
+        role: userType === "farmer" ? "farmer" : "consumer" 
       }
-    } catch (err) {
-      setError("Failed to create account. Please try again.")
+
+      // Add farmer specific data if applicable
+      if (userType === "farmer") {
+        // Convert farmSize to a number for database
+        const numericFarmSize = parseFloat(farmSize) || 0;
+        
+        Object.assign(userData, {
+          farm_name: fullName + "'s Farm",
+          farm_size: numericFarmSize, // Send as number instead of string
+          farm_location: city + ", " + state,
+          farm_description: "Primary crops: " + primaryCrops + ". Business type: " + businessType,
+          farmDetails: {
+            size: farmSize + " acres",
+            crops: primaryCrops,
+            location: city + ", " + state
+          }
+        })
+      }
+
+      // Save basic data in localStorage for use across the app
+      localStorage.setItem("fullName", fullName)
+      localStorage.setItem("email", email)
+      localStorage.setItem("mobile", mobile)
+      localStorage.setItem("userType", userType)
+      
+      // Save full user data
+      localStorage.setItem("user-data", JSON.stringify({
+        name: fullName,
+        email: email,
+        phone: mobile,
+        address: address ? `${address}, ${city}, ${state}, ${pincode}` : "",
+        role: userType,
+        farmDetails: userType === "farmer" ? {
+          size: farmSize + " acres",
+          crops: primaryCrops,
+          location: city + ", " + state
+        } : null
+      }))
+
+      // Send registration request to the server
+      const response = await fetch('http://localhost:5000/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      })
+
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed')
+      }
+
+      // Registration successful
+      // Redirect to profile page regardless of user type
+      router.push("/profile")
+    } catch (err: any) {
+      setError(err.message || "Failed to create account. Please try again.")
     } finally {
       setIsLoading(false)
     }

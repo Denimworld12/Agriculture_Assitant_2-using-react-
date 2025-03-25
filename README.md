@@ -19,7 +19,7 @@ Users can explore the marketplace to buy crops, groceries, and farming products.
 
 Filter and sort crops based on categories, price range, location, and other criteria.
 
-View detailed crop information, including the farmer’s contact details for direct communication.
+View detailed crop information, including the farmer's contact details for direct communication.
 
 Bulk discounts apply automatically based on quantity, encouraging bulk purchases.
 
@@ -215,6 +215,16 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+### Development Mode Auto-Login
+
+When running in development mode (`npm run dev`), the application will automatically log in with a random user account for faster testing and development. The system randomly selects between these sample accounts:
+
+- Admin: admin@example.com / admin123
+- Consumer: user@example.com / user123  
+- Farmer: farmer@example.com / farmer123
+
+If you're already logged in (have an existing auth token), the auto-login will be skipped. To test with a different user, clear your localStorage first or use an incognito/private browser window.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
@@ -233,3 +243,132 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+# Agriculture Assistant
+
+A platform that connects farmers directly with consumers, facilitates equipment rentals, and provides market information for agricultural products.
+
+## Features
+
+- User authentication (consumer, farmer, admin roles)
+- Product marketplace for agricultural products
+- Equipment rental system
+- Order management
+- Farmer verification
+- Market price tracking
+- News and government scheme information
+
+## Database Structure
+
+The application uses a MySQL database with the following entity tables:
+- Users (consumers, farmers, admins)
+- Products
+- Orders
+- Equipment Rentals
+- Market Prices
+- and more
+
+All passwords are stored in plain text as specified in the requirements.
+
+## Setup Instructions
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- MySQL (v8.0 or higher)
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone <repository-url>
+cd agriculture-assistant
+```
+
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Configure the database
+   - Open `db/init-db.js` and update the MySQL credentials if needed:
+   ```javascript
+   const dbConfig = {
+     host: 'localhost',
+     user: 'root',  // Update with your MySQL username
+     password: '',  // Update with your MySQL password
+     multipleStatements: true
+   };
+   ```
+
+4. Initialize the database
+```bash
+npm run init-db
+```
+
+5. Start the application (server and frontend)
+```bash
+npm run dev:all
+```
+
+Alternatively, you can run the server and frontend separately:
+```bash
+# Terminal 1
+npm run server
+
+# Terminal 2
+npm run dev
+```
+
+6. Access the application at http://localhost:3000
+
+### Default User Accounts
+
+The database initialization creates the following sample accounts:
+
+- **Admin User**
+  - Email: admin@example.com
+  - Password: admin123
+
+- **Consumer**
+  - Email: user@example.com
+  - Password: user123
+
+- **Farmer**
+  - Email: farmer@example.com
+  - Password: farmer123
+
+## API Endpoints
+
+The application provides the following API endpoints:
+
+### Authentication
+- `POST /api/register` - Register a new user
+- `POST /api/login` - Login and get authentication token
+
+### Products
+- `GET /api/products` - Get all products
+- `POST /api/products` - Add a new product (farmers only)
+- `GET /api/products/:id` - Get a specific product
+
+### Orders
+- `POST /api/orders` - Place a new order
+- `GET /api/orders` - Get user's orders
+- `GET /api/orders/:id` - Get order details
+
+### Farmers
+- `GET /api/farmers/:id/products` - Get products by a farmer
+- `GET /api/farmers/:id/reviews` - Get reviews for a farmer
+
+### Equipment
+- `GET /api/equipment` - Get all equipment for rent
+- `POST /api/equipment` - Add equipment for rent (farmers only)
+- `POST /api/equipment/:id/book` - Book equipment
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

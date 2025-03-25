@@ -1,14 +1,15 @@
-import type React from "react"
+import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
+import AppProvider from "./app"
 
 const inter = Inter({ subsets: ["latin"] })
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Agriculture Assistant",
-  description: "A platform connecting farmers and consumers",
+  description: "Connecting farmers and consumers",
   icons: {
     icon: [
       { url: "/favicon/favicon.ico", sizes: "any" },
@@ -74,10 +75,12 @@ export default function RootLayout({
         `}} />
       </head>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        <AppProvider>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </AppProvider>
       </body>
     </html>
   )

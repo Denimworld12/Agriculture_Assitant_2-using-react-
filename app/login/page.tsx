@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import MainLayout from "@/components/main-layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,6 +16,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [userType, setUserType] = useState("user")
@@ -37,22 +38,57 @@ export default function LoginPage() {
     setError("")
     setIsLoading(true)
 
+    if (!email || !password) {
+      setError("Please enter both email and password")
+      setIsLoading(false)
+      return
+    }
+
     try {
-      // Mock login - in a real app, this would be an API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      // Simulate successful login without checking from database
+      const mockToken = "mock-token-12345"
+      const mockUser = {
+        id: 1,
+        name: "Test User",
+        email: email, // Use provided email
+        phone: "1234567890",
+        address: "123 Mock Street, Mumbai, 400001",
+        role: userType,
+        avatar: "/default-avatar.png",
+        farmDetails:
+          userType === "farmer"
+            ? {
+                id: 1,
+                farm_name: "Mock Farm",
+                size: "10 acres",
+                crops: "Wheat, Rice",
+                location: "Maharashtra",
+                verification_status: "verified",
+              }
+            : null,
+        cart: [],
+        wishlist: [],
+        recentOrders: [],
+      }
 
-      // Store auth token in localStorage
-      localStorage.setItem("auth-token", "mock-token-12345")
-      localStorage.setItem("user-type", userType)
+      // Save auth token and user data to localStorage
+      localStorage.setItem("auth-token", mockToken)
+      localStorage.setItem(
+        "user-data",
+        JSON.stringify(mockUser)
+      )
+      localStorage.setItem("userType", userType)
+      localStorage.setItem("last-login", new Date().toISOString())
 
-      // Redirect based on user type
+      // Redirect based on user role
       if (userType === "farmer") {
         router.push("/farmer/dashboard")
       } else {
-        router.push("/")
+        router.push("/profile")
       }
-    } catch (err) {
-      setError("Invalid email or password. Please try again.")
+    } catch (err: any) {
+      console.error("Login error:", err)
+      setError("Failed to login. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -64,8 +100,12 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl font-bold text-center">Welcome back</CardTitle>
-              <CardDescription className="text-center">Login to your account to continue</CardDescription>
+              <CardTitle className="text-2xl font-bold text-center">
+                Welcome back
+              </CardTitle>
+              <CardDescription className="text-center">
+                Login to your account to continue
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="user" onValueChange={setUserType}>
@@ -97,7 +137,10 @@ export default function LoginPage() {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label htmlFor="password">Password</Label>
-                        <Link href="/forgot-password" className="text-sm text-green-700 hover:text-green-800">
+                        <Link
+                          href="/forgot-password"
+                          className="text-sm text-green-700 hover:text-green-800"
+                        >
                           Forgot password?
                         </Link>
                       </div>
@@ -110,7 +153,11 @@ export default function LoginPage() {
                       />
                     </div>
 
-                    <Button type="submit" className="w-full bg-green-700 hover:bg-green-800" disabled={isLoading}>
+                    <Button
+                      type="submit"
+                      className="w-full bg-green-700 hover:bg-green-800"
+                      disabled={isLoading}
+                    >
                       {isLoading ? "Logging in..." : "Login"}
                     </Button>
                   </div>
@@ -120,18 +167,27 @@ export default function LoginPage() {
             <CardFooter className="flex flex-col space-y-4">
               <div className="text-center text-sm">
                 Don't have an account?{" "}
-                <Link href="/signup" className="text-green-700 hover:text-green-800 font-medium">
+                <Link
+                  href="/signup"
+                  className="text-green-700 hover:text-green-800 font-medium"
+                >
                   Sign up
                 </Link>
               </div>
 
               <div className="text-center text-xs text-muted-foreground">
                 By logging in, you agree to our{" "}
-                <Link href="/terms" className="underline underline-offset-2">
+                <Link
+                  href="/terms"
+                  className="underline underline-offset-2"
+                >
                   Terms of Service
                 </Link>{" "}
                 and{" "}
-                <Link href="/privacy" className="underline underline-offset-2">
+                <Link
+                  href="/privacy"
+                  className="underline underline-offset-2"
+                >
                   Privacy Policy
                 </Link>
               </div>
@@ -146,10 +202,14 @@ export default function LoginPage() {
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md w-full p-6">
             <h3 className="text-xl font-bold mb-2">Login to Continue</h3>
             <p className="text-muted-foreground mb-4">
-              Create an account or login to access all features of Agriculture Assistant.
+              Create an account or login to access all features of Agriculture
+              Assistant.
             </p>
             <div className="flex gap-3">
-              <Button className="flex-1 bg-green-700 hover:bg-green-800" onClick={() => setShowLoginPrompt(false)}>
+              <Button
+                className="flex-1 bg-green-700 hover:bg-green-800"
+                onClick={() => setShowLoginPrompt(false)}
+              >
                 Login Now
               </Button>
               <Button
@@ -163,7 +223,11 @@ export default function LoginPage() {
                 Sign Up
               </Button>
             </div>
-            <Button variant="ghost" className="w-full mt-2" onClick={() => setShowLoginPrompt(false)}>
+            <Button
+              variant="ghost"
+              className="w-full mt-2"
+              onClick={() => setShowLoginPrompt(false)}
+            >
               Continue as Guest
             </Button>
           </div>
@@ -172,4 +236,3 @@ export default function LoginPage() {
     </MainLayout>
   )
 }
-
