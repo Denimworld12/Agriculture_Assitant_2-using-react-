@@ -78,30 +78,36 @@ export default function Home() {
             </div>
             <div className="carousel-inner rounded-lg overflow-hidden">
               <div className="carousel-item active">
-                <img
+                <Image
                   src="/Rabi_Abhiyan_21102024.jpg"
                   className="d-block w-100"
                   alt="National Conference on Agriculture - Rabi Campaign 2024"
+                  width={500}
+                  height={300}
                 />
                 <div className="carousel-caption d-none d-md-block">
                   {/* Caption content can be added here if needed */}
                 </div>
               </div>
               <div className="carousel-item">
-                <img
+                <Image
                   src="/Krishi_DSS_2_0.jpg"
                   className="d-block w-100"
                   alt="Krishi DSS 2.0"
+                  width={500}
+                  height={300}
                 />
                 <div className="carousel-caption d-none d-md-block">
                   {/* Caption content can be added here if needed */}
                 </div>
               </div>
               <div className="carousel-item">
-                <img
+                <Image
                   src="/Krishi_Nivesh_0.jpg"
                   className="d-block w-100"
                   alt="Krishi Nivesh Portal Launch"
+                  width={500}
+                  height={300}
                 />
                 <div className="carousel-caption d-none d-md-block">
                   {/* Caption content can be added here if needed */}
@@ -363,7 +369,8 @@ export default function Home() {
                       <Image
                         src={`/soilsch1.jpg?height=96&width=96&text=News ${item}`}
                         alt={`News ${item}`}
-                        fill
+                        width={96}
+                        height={96}
                         className="object-cover"
                       />
                     </div>

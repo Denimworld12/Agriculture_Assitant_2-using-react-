@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -115,7 +115,7 @@ export default function ProfilePage() {
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([])
 
   // Fetch user profile and related data from API
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     const token = localStorage.getItem("auth-token")
     
     if (!token) {
@@ -267,12 +267,12 @@ export default function ProfilePage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [router, profile])
 
   // Check if user is logged in and load user data
   useEffect(() => {
     fetchUserData()
-  }, [router])
+  }, [fetchUserData])
 
   const handleEditClick = (field: string, value: string) => {
     setEditField(field)

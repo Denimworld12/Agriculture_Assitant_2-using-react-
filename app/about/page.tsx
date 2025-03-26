@@ -81,7 +81,7 @@ export default function AboutPage() {
               <h2 className="text-3xl font-bold mb-6">Our Story</h2>
               <div className="space-y-4">
                 <p>
-                  Agriculture Assistant was born from a simple observation: farmers weren't getting fair prices for
+                  Agriculture Assistant was born from a simple observation: farmers weren&apos;t getting fair prices for
                   their produce, while consumers were paying high prices due to multiple intermediaries in the supply
                   chain.
                 </p>
@@ -95,7 +95,7 @@ export default function AboutPage() {
                   services, and access to government schemes.
                 </p>
                 <p>
-                  Today, we're proud to serve thousands of farmers and consumers across Maharashtra, with plans to
+                  Today, we&apos;re proud to serve thousands of farmers and consumers across Maharashtra, with plans to
                   expand our services nationwide.
                 </p>
               </div>
@@ -118,7 +118,7 @@ export default function AboutPage() {
           <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Our Mission & Vision</h2>
             <p className="text-lg text-muted-foreground">
-              We're committed to transforming agricultural commerce and empowering farming communities.
+              We&apos;re committed to transforming agricultural commerce and empowering farming communities.
             </p>
           </div>
 
@@ -156,7 +156,7 @@ export default function AboutPage() {
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-4">Our Vision</h3>
                 <p className="mb-6">
-                  To become India's leading agricultural platform that transforms the way farming communities operate,
+                  To become India&apos;s leading agricultural platform that transforms the way farming communities operate,
                   making agriculture more profitable, sustainable, and accessible for everyone involved.
                 </p>
                 <ul className="space-y-2">
@@ -323,7 +323,7 @@ export default function AboutPage() {
             <div className="max-w-3xl mx-auto text-center px-4 py-12">
               <h2 className="text-3xl font-bold mb-4">Join Our Agricultural Revolution</h2>
               <p className="text-lg text-green-100 mb-8">
-                Whether you're a farmer looking to sell your produce or a consumer seeking fresh, locally-grown food,
+                Whether you&apos;re a farmer looking to sell your produce or a consumer seeking fresh, locally-grown food,
                 Agriculture Assistant is here to help.
               </p>
               <div className="flex flex-wrap justify-center gap-4">

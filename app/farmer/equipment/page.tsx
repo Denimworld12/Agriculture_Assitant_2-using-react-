@@ -220,7 +220,8 @@ export default function EquipmentPage() {
         setRentDays(1)
         setStartDate("")
       }, 2000)
-    } catch (err) {
+    } catch {
+      console.error('Error occurred');
       setError("Failed to rent equipment. Please try again.")
     } finally {
       setIsLoading(false)

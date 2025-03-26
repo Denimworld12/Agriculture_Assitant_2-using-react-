@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import MainLayout from "@/components/main-layout"
+import MainLayout from "@/components/layouts/MainLayout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
@@ -18,9 +18,10 @@ import {
 } from "@/components/ui/dialog"
 import { Trash2, ShoppingBag, ArrowRight, Phone, Mail, MapPin, Check } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { CartItem, Farmer } from "@/types"
 
 // Mock farmer data
-const FARMERS = {
+const FARMERS: Record<string, Farmer> = {
   "Rajesh Patel": {
     id: 101,
     name: "Rajesh Patel",
@@ -47,15 +48,14 @@ const FARMERS = {
   },
 }
 
-export default function CartPage() {
+                                                                                    export default function CartPage() {
   const router = useRouter()
-  const [cartItems, setCartItems] = useState<any[]>([])
+  const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [userData, setUserData] = useState<any>(null)
   const [showCheckoutDialog, setShowCheckoutDialog] = useState(false)
   const [showLoginDialog, setShowLoginDialog] = useState(false)
   const [showSuccessDialog, setShowSuccessDialog] = useState(false)
-  const [checkoutFarmers, setCheckoutFarmers] = useState<any[]>([])
+  const [checkoutFarmers, setCheckoutFarmers] = useState<Farmer[]>([])
   const [orderId, setOrderId] = useState("")
 
   // Check if user is logged in and load cart items
@@ -66,10 +66,6 @@ export default function CartPage() {
     if (token) {
       const cart = JSON.parse(localStorage.getItem("cart") || "[]")
       setCartItems(cart)
-
-      // Get user data
-      const data = JSON.parse(localStorage.getItem("user-data") || '{"name":"Guest"}')
-      setUserData(data)
     }
   }, [])
 
@@ -79,7 +75,7 @@ export default function CartPage() {
   }
 
   // Update item quantity
-  const updateQuantity = (id: number, newQuantity: number) => {
+  const updateQuantity = (id: string, newQuantity: number) => {
     if (newQuantity < 1) return
 
     const updatedCart = cartItems.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item))
@@ -89,7 +85,7 @@ export default function CartPage() {
   }
 
   // Remove item from cart
-  const removeItem = (id: number) => {
+  const removeItem = (id: string) => {
     const updatedCart = cartItems.filter((item) => item.id !== id)
     setCartItems(updatedCart)
     localStorage.setItem("cart", JSON.stringify(updatedCart))
@@ -104,7 +100,6 @@ export default function CartPage() {
 
     // Get unique farmers from cart items
     const farmers = [...new Set(cartItems.map((item) => item.farmer))].map((farmerName) => {
-      // @ts-ignore
       return FARMERS[farmerName]
     })
 
@@ -296,7 +291,7 @@ export default function CartPage() {
               <ShoppingBag className="h-8 w-8" />
             </div>
             <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
-            <p className="text-muted-foreground mb-6">Looks like you haven't added any products to your cart yet.</p>
+            <p className="text-muted-foreground mb-6">Looks like you haven&apos;t added any products to your cart yet.</p>
             <Link href="/market">
               <Button className="bg-green-700 hover:bg-green-800">Browse Marketplace</Button>
             </Link>
@@ -423,4 +418,3 @@ export default function CartPage() {
     </MainLayout>
   )
 }
-
