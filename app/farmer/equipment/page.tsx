@@ -174,11 +174,19 @@ export default function EquipmentPage() {
   // Check if user is logged in
   useEffect(() => {
     const token = localStorage.getItem("auth-token")
-    setIsLoggedIn(!!token)
+    const userType = localStorage.getItem("userType")
+    setIsLoggedIn(!!token && userType === "farmer")
 
-    // Load mock rentals
-    const mockRentals = JSON.parse(localStorage.getItem("my-rentals") || "[]")
-    setMyRentals(mockRentals)
+    // Load saved rentals
+    const savedRentals = localStorage.getItem("my-rentals")
+    if (savedRentals) {
+      try {
+        const parsedRentals = JSON.parse(savedRentals) as Rental[]
+        setMyRentals(parsedRentals)
+      } catch (error) {
+        console.error("Error parsing saved rentals:", error)
+      }
+    }
   }, [])
 
   // Filter equipment based on search, location, and price
@@ -246,8 +254,8 @@ export default function EquipmentPage() {
         setRentDays(1)
         setStartDate("")
       }, 2000)
-    } catch {
-      console.error('Error occurred');
+    } catch (error) {
+      console.error("Error occurred:", error)
       setError("Failed to rent equipment. Please try again.")
     } finally {
       setIsLoading(false)
@@ -511,6 +519,21 @@ export default function EquipmentPage() {
 
         <p className="text-sm text-muted-foreground mt-1">
           * Delivery arrangements to be made directly with the owner
+        </p>
+
+        <p className="text-sm text-gray-500">
+          By renting, you agree to our terms and conditions. Equipment will be
+          delivered to your specified location on the selected date.
+        </p>
+
+        <p className="text-sm text-gray-500">
+          Please ensure you have a valid payment method and delivery address
+          before confirming your rental.
+        </p>
+
+        <p className="text-sm text-gray-500">
+          Your rental request has been submitted. We&apos;ll contact you shortly
+          to confirm the details.
         </p>
       </div>
 

@@ -25,13 +25,13 @@ export default function LoginPage() {
 
 function LoginContent() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [userType, setUserType] = useState("user")
+  const [userType, setUserType] = useState<"consumer" | "farmer">("consumer")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [showLoginPrompt, setShowLoginPrompt] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   // Show login prompt after 10 seconds
   useEffect(() => {
@@ -42,62 +42,49 @@ function LoginContent() {
     return () => clearTimeout(timer)
   }, [])
 
+  const handleUserTypeChange = (value: "consumer" | "farmer") => {
+    setUserType(value)
+  }
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setIsLoading(true)
 
-    if (!email || !password) {
-      setError("Please enter both email and password")
-      setIsLoading(false)
-      return
-    }
-
     try {
-      // Simulate successful login without checking from database
-      const mockToken = "mock-token-12345"
-      const mockUser = {
-        id: 1,
-        name: "Test User",
-        email: email, // Use provided email
-        phone: "1234567890",
-        address: "123 Mock Street, Mumbai, 400001",
-        role: userType,
-        avatar: "/default-avatar.png",
-        farmDetails:
-          userType === "farmer"
-            ? {
-                id: 1,
-                farm_name: "Mock Farm",
-                size: "10 acres",
-                crops: "Wheat, Rice",
-                location: "Maharashtra",
-                verification_status: "verified",
-              }
-            : null,
-        cart: [],
-        wishlist: [],
-        recentOrders: [],
-      }
+      // Mock API call
+      await new Promise((resolve) => setTimeout(resolve, 1500))
 
-      // Save auth token and user data to localStorage
-      localStorage.setItem("auth-token", mockToken)
-      localStorage.setItem(
-        "user-data",
-        JSON.stringify(mockUser)
-      )
-      localStorage.setItem("userType", userType)
-      localStorage.setItem("last-login", new Date().toISOString())
+      // Mock validation
+      if (email === "test@example.com" && password === "password") {
+        // Store auth data
+        localStorage.setItem("auth-token", "mock-token")
+        localStorage.setItem("userType", userType)
+        localStorage.setItem(
+          "user-data",
+          JSON.stringify({
+            id: 1,
+            name: "Test User",
+            email: email,
+            type: userType,
+          })
+        )
+        localStorage.setItem("last-login", new Date().toISOString())
 
-      // Redirect based on user role
-      if (userType === "farmer") {
-        router.push("/farmer/dashboard")
+        setIsLoggedIn(true)
+
+        // Redirect based on user type
+        if (userType === "consumer") {
+          router.push("/profile")
+        } else {
+          router.push("/farmer")
+        }
       } else {
-        router.push("/profile")
+        setError("Invalid email or password")
       }
-    } catch (err: any) {
-      console.error("Login error:", err)
-      setError("Failed to login. Please try again.")
+    } catch (error) {
+      console.error("Login error:", error)
+      setError("An error occurred during login")
     } finally {
       setIsLoading(false)
     }
