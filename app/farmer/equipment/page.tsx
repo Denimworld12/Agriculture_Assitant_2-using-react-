@@ -21,9 +21,36 @@ import {
 } from "@/components/ui/dialog"
 import { Calendar, MapPin, AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Equipment, User } from "@/types"
+
+interface EquipmentOwner extends Omit<User, 'id'> {
+  image: string;
+}
+
+interface EquipmentItem {
+  id: number;
+  name: string;
+  image: string;
+  price: number;
+  unit: string;
+  location: string;
+  availability: string;
+  description: string;
+  owner: EquipmentOwner;
+}
+
+interface Rental {
+  id: number;
+  equipment: EquipmentItem;
+  startDate: string;
+  days: number;
+  totalPrice: number;
+  status: string;
+  date: string;
+}
 
 // Mock equipment data
-const EQUIPMENT = [
+const EQUIPMENT: EquipmentItem[] = [
   {
     id: 1,
     name: "Tractor",
@@ -133,7 +160,7 @@ export default function EquipmentPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedLocation, setSelectedLocation] = useState("all")
   const [priceRange, setPriceRange] = useState("all")
-  const [selectedEquipment, setSelectedEquipment] = useState<any>(null)
+  const [selectedEquipment, setSelectedEquipment] = useState<EquipmentItem | null>(null)
   const [rentDays, setRentDays] = useState(1)
   const [startDate, setStartDate] = useState("")
   const [showLoginDialog, setShowLoginDialog] = useState(false)
@@ -142,7 +169,7 @@ export default function EquipmentPage() {
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [myRentals, setMyRentals] = useState<any[]>([])
+  const [myRentals, setMyRentals] = useState<Rental[]>([])
 
   // Check if user is logged in
   useEffect(() => {
@@ -171,18 +198,17 @@ export default function EquipmentPage() {
     return matchesSearch && matchesLocation && matchesPrice
   })
 
-  const handleRentClick = (equipment: any) => {
+  const handleRentEquipment = (equipment: EquipmentItem) => {
     if (!isLoggedIn) {
       setShowLoginDialog(true)
       return
     }
-
     setSelectedEquipment(equipment)
     setShowRentDialog(true)
   }
 
   const handleRentSubmit = async () => {
-    if (!startDate) {
+    if (!startDate || !selectedEquipment) {
       setError("Please select a start date")
       return
     }
@@ -194,7 +220,7 @@ export default function EquipmentPage() {
       await new Promise((resolve) => setTimeout(resolve, 1500))
 
       // Create new rental
-      const newRental = {
+      const newRental: Rental = {
         id: Date.now(),
         equipment: selectedEquipment,
         startDate: startDate,
@@ -368,7 +394,7 @@ export default function EquipmentPage() {
                             </span>
                             <Button
                               className="bg-green-700 hover:bg-green-800"
-                              onClick={() => handleRentClick(equipment)}
+                              onClick={() => handleRentEquipment(equipment)}
                             >
                               Rent Now
                             </Button>
@@ -482,6 +508,10 @@ export default function EquipmentPage() {
             </div>
           </TabsContent>
         </Tabs>
+
+        <p className="text-sm text-muted-foreground mt-1">
+          * Delivery arrangements to be made directly with the owner
+        </p>
       </div>
 
       {/* Login Dialog */}
