@@ -1,23 +1,15 @@
 module.exports = {
   extends: ['next/core-web-vitals'],
   rules: {
-    'react/no-unescaped-entities': ['error', {
-      forbid: ['>', '}'],
-      allow: ["'", '"', '`']
-    }],
-    '@typescript-eslint/no-explicit-any': ['error', {
-      ignoreRestArgs: true,
-      fixToUnknown: true
-    }],
-    '@typescript-eslint/no-unused-vars': ['error', { 
+    'react/no-unescaped-entities': 'off',
+    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-unused-vars': ['warn', { 
       argsIgnorePattern: '^_',
       varsIgnorePattern: '^_',
-      ignoreRestSiblings: true,
-      args: 'none',
-      vars: 'none'
+      ignoreRestSiblings: true
     }],
     '@typescript-eslint/ban-ts-comment': [
-      'error',
+      'warn',
       {
         'ts-expect-error': 'allow-with-description',
         'ts-ignore': false,

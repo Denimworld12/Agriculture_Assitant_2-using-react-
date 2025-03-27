@@ -41,8 +41,34 @@ export interface TrackingStep {
   description: string;
 }
 
-export type ApiResponse<T> = {
+export interface ApiResponse<T> {
   success: boolean;
   data?: T;
   error?: string;
+}
+
+export interface NewsArticle {
+  title: string;
+  description: string;
+  url: string;
+  image?: string;
+  publishedAt: string;
+}
+
+export interface Equipment {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  category: string;
+  available: boolean;
+}
+
+export interface FormData {
+  name: string;
+  email: string;
+  password: string;
+  phone?: string;
+  address?: string;
 } 
