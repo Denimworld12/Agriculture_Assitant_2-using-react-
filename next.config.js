@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
   images: {
     domains: [
       // News sites
@@ -29,6 +30,7 @@ const nextConfig = {
       'www.washingtonpost.com',
       'www.aljazeera.com',
       's.abcnews.com',
+      'placeholder.com',
     ],
     remotePatterns: [
       {
