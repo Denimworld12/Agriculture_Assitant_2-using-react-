@@ -25,6 +25,7 @@ interface TrackingStep {
 }
 
 interface Farmer {
+  id?: number
   name: string
   phone: string
   email: string
@@ -39,11 +40,12 @@ interface Order {
   total: number
   status: string
   trackingSteps: TrackingStep[]
-  farmer: Farmer
+  farmer?: Farmer
+  farmers?: Farmer[]
 }
 
-// Mock order data with typed index signature
-const ORDERS: Record<string, Order> = {
+// Fallback mock order data if needed
+const MOCK_ORDERS: Record<string, Order> = {
   ORD12345: {
     id: "ORD12345",
     date: "2023-04-10",
@@ -103,59 +105,6 @@ const ORDERS: Record<string, Order> = {
       image: "/placeholder.svg?height=100&width=100&text=RP",
     },
   },
-  ORD12346: {
-    id: "ORD12346",
-    date: "2023-03-25",
-    items: [
-      {
-        name: "Alphonso Mangoes",
-        quantity: 2,
-        price: 400,
-        image: "/placeholder.svg?height=100&width=100&text=Mangoes",
-      },
-    ],
-    total: 800,
-    status: "Delivered",
-    trackingSteps: [
-      {
-        status: "Order Placed",
-        date: "2023-03-25 02:15 PM",
-        completed: true,
-        description: "Your order has been placed successfully.",
-      },
-      {
-        status: "Order Confirmed",
-        date: "2023-03-25 03:30 PM",
-        completed: true,
-        description: "Your order has been confirmed by the farmer.",
-      },
-      {
-        status: "Preparing for Delivery",
-        date: "2023-03-26 10:00 AM",
-        completed: true,
-        description: "The farmer is preparing your order for delivery.",
-      },
-      {
-        status: "Out for Delivery",
-        date: "2023-03-27 09:45 AM",
-        completed: true,
-        description: "Your order is out for delivery.",
-      },
-      {
-        status: "Delivered",
-        date: "2023-03-27 02:30 PM",
-        completed: true,
-        description: "Your order has been delivered successfully.",
-      },
-    ],
-    farmer: {
-      name: "Suresh Desai",
-      phone: "+91 76543 21098",
-      email: "suresh@example.com",
-      address: "789 Mango Orchard, Ratnagiri, Maharashtra",
-      image: "/placeholder.svg?height=100&width=100&text=SD",
-    },
-  },
 }
 
 export default function TrackOrderPage() {
@@ -166,20 +115,56 @@ export default function TrackOrderPage() {
   const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [primaryFarmer, setPrimaryFarmer] = useState<Farmer | null>(null)
 
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        // Mock API call
-        await new Promise((resolve) => setTimeout(resolve, 1000))
+        // Add a small delay to simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 500))
 
-        // Check if order exists
-        if (ORDERS[orderId]) {
-          setOrder(ORDERS[orderId])
+        // Get orders from localStorage
+        const ordersData = localStorage.getItem("orders")
+        let orders: Order[] = []
+
+        if (ordersData) {
+          orders = JSON.parse(ordersData)
+        }
+
+        // Find the order with the matching ID
+        const foundOrder = orders.find((o) => o.id === orderId)
+
+        if (foundOrder) {
+          setOrder(foundOrder)
+          
+          // Handle farmer information
+          if (foundOrder.farmer) {
+            // Single farmer case
+            setPrimaryFarmer(foundOrder.farmer)
+          } else if (foundOrder.farmers && foundOrder.farmers.length > 0) {
+            // Multiple farmers case - use the first one as primary
+            setPrimaryFarmer(foundOrder.farmers[0])
+          } else {
+            // No farmer info available
+            setPrimaryFarmer({
+              name: "Unknown Farmer",
+              phone: "Contact store",
+              email: "info@farmmarket.com",
+              address: "Farm Market HQ",
+              image: "/placeholder.svg?height=100&width=100&text=?",
+            })
+          }
         } else {
-          setError("Order not found")
+          // Fallback to mock data if available
+          if (MOCK_ORDERS[orderId]) {
+            setOrder(MOCK_ORDERS[orderId])
+            setPrimaryFarmer(MOCK_ORDERS[orderId].farmer || null)
+          } else {
+            setError("Order not found")
+          }
         }
       } catch (err) {
+        console.error("Failed to fetch order details:", err)
         setError("Failed to fetch order details")
       } finally {
         setLoading(false)
@@ -268,7 +253,7 @@ export default function TrackOrderPage() {
 
                         <div>
                           <h3 className="font-medium">{step.status}</h3>
-                          <p className="text-sm text-muted-foreground mb-1">{step.date}</p>
+                          <p className="text-sm text-muted-foreground mb-1">{step.date || "Pending"}</p>
                           <p className="text-sm">{step.description}</p>
                         </div>
                       </div>
@@ -287,7 +272,12 @@ export default function TrackOrderPage() {
                   {order.items.map((item: OrderItem, index: number) => (
                     <div key={index} className="flex gap-4 py-2 border-b last:border-b-0">
                       <div className="relative h-16 w-16 rounded-md overflow-hidden flex-shrink-0">
-                        <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-cover" />
+                        <Image 
+                          src={item.image || "/placeholder.svg"} 
+                          alt={item.name} 
+                          fill 
+                          className="object-cover" 
+                        />
                       </div>
                       <div className="flex-1">
                         <h3 className="font-medium">{item.name}</h3>
@@ -312,47 +302,80 @@ export default function TrackOrderPage() {
           </div>
 
           <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Farmer Information</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="relative h-12 w-12 rounded-full overflow-hidden">
-                    <Image
-                      src={order.farmer.image || "/placeholder.svg"}
-                      alt={order.farmer.name}
-                      fill
-                      className="object-cover"
-                    />
+            {primaryFarmer && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Farmer Information</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="relative h-12 w-12 rounded-full overflow-hidden">
+                      <Image
+                        src={primaryFarmer.image || "/placeholder.svg"}
+                        alt={primaryFarmer.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="font-medium">{primaryFarmer.name}</h3>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-medium">{order.farmer.name}</h3>
-                  </div>
-                </div>
 
-                <div className="space-y-3">
-                  <div className="flex items-center">
-                    <Phone className="h-4 w-4 mr-2 text-muted-foreground" />
-                    {order.farmer.phone}
+                  <div className="space-y-3">
+                    <div className="flex items-center">
+                      <Phone className="h-4 w-4 mr-2 text-muted-foreground" />
+                      {primaryFarmer.phone}
+                    </div>
+                    <div className="flex items-center">
+                      <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
+                      {primaryFarmer.email}
+                    </div>
+                    <div className="flex items-start">
+                      <MapPin className="h-4 w-4 mr-2 text-muted-foreground mt-0.5" />
+                      {primaryFarmer.address}
+                    </div>
                   </div>
-                  <div className="flex items-center">
-                    <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
-                    {order.farmer.email}
-                  </div>
-                  <div className="flex items-start">
-                    <MapPin className="h-4 w-4 mr-2 text-muted-foreground mt-0.5" />
-                    {order.farmer.address}
-                  </div>
-                </div>
 
-                <div className="mt-6">
-                  <Button className="w-full bg-green-700 hover:bg-green-800">Contact Farmer</Button>
-                </div>
-              </CardContent>
-            </Card>
+                  <div className="mt-6">
+                    <Button className="w-full bg-green-700 hover:bg-green-800">Contact Farmer</Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
-            <Card className="mt-6">
+            {order.farmers && order.farmers.length > 1 && (
+              <Card className="mt-6">
+                <CardHeader>
+                  <CardTitle>Additional Farmers</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {order.farmers.slice(1).map((farmer, index) => (
+                      <div key={index} className="flex items-center gap-3 py-2 border-b last:border-b-0">
+                        <div className="relative h-10 w-10 rounded-full overflow-hidden">
+                          <Image
+                            src={farmer.image || "/placeholder.svg"}
+                            alt={farmer.name}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-medium">{farmer.name}</h3>
+                          <p className="text-xs text-muted-foreground">{farmer.phone}</p>
+                        </div>
+                        <Button size="sm" variant="outline">
+                          Contact
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            <Card className={`${primaryFarmer ? "mt-6" : ""}`}>
               <CardHeader>
                 <CardTitle>Need Help?</CardTitle>
               </CardHeader>
@@ -371,4 +394,3 @@ export default function TrackOrderPage() {
     </MainLayout>
   )
 }
-

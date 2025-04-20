@@ -19,7 +19,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function SignupPage() {
   const router = useRouter()
-  const [userType, setUserType] = useState("user")
+  const [userType, setUserType] = useState<'consumer' | 'farmer'>('consumer')
   const [fullName, setFullName] = useState("")
   const [email, setEmail] = useState("")
   const [mobile, setMobile] = useState("")
@@ -32,7 +32,10 @@ export default function SignupPage() {
   const [state, setState] = useState("")
   const [pincode, setPincode] = useState("")
   const [businessType, setBusinessType] = useState("")
+  const [farmName, setFarmName] = useState("")
   const [farmSize, setFarmSize] = useState("")
+  const [farmLocation, setFarmLocation] = useState("")
+  const [farmDescription, setFarmDescription] = useState("")
   const [primaryCrops, setPrimaryCrops] = useState("")
   const [otpSent, setOtpSent] = useState(false)
   const [otp, setOtp] = useState("")
@@ -140,7 +143,7 @@ export default function SignupPage() {
       }
 
       // Add farmer specific data if applicable
-      if (userType === "farmer") {
+      if (userType === 'consumer') {
         // Convert farmSize to a number for database
         const numericFarmSize = parseFloat(farmSize) || 0;
         
@@ -214,9 +217,13 @@ export default function SignupPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Tabs defaultValue="user" value={userType} onValueChange={setUserType}>
+              <Tabs defaultValue="consumer" value={userType} onValueChange={(value: string) => {
+                if (value === "consumer" || value === "farmer") {
+                  setUserType(value)
+                }
+              }}>
                 <TabsList className="grid w-full grid-cols-2 mb-6">
-                  <TabsTrigger value="user">Consumer</TabsTrigger>
+                  <TabsTrigger value="consumer">Consumer</TabsTrigger>
                   <TabsTrigger value="farmer">Farmer</TabsTrigger>
                 </TabsList>
 
@@ -481,7 +488,7 @@ export default function SignupPage() {
                           Back
                         </Button>
 
-                        {userType === "user" ? (
+                        {userType === "consumer" ? (
                           <Button type="submit" className="bg-green-700 hover:bg-green-800" disabled={isLoading}>
                             {isLoading ? "Creating Account..." : "Create Account"}
                           </Button>

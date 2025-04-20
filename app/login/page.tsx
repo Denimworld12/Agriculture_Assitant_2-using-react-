@@ -42,8 +42,10 @@ function LoginContent() {
     return () => clearTimeout(timer)
   }, [])
 
-  const handleUserTypeChange = (value: "consumer" | "farmer") => {
-    setUserType(value)
+  const handleUserTypeChange = (value: string) => {
+    if (value === "consumer" || value === "farmer") {
+      setUserType(value as "consumer" | "farmer")
+    }
   }
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -55,7 +57,7 @@ function LoginContent() {
       // Mock API call
       await new Promise((resolve) => setTimeout(resolve, 1500))
 
-      // Mock validation
+      // Check for valid credentials
       if (email === "test@example.com" && password === "password") {
         // Store auth data
         localStorage.setItem("auth-token", "mock-token")
@@ -73,10 +75,10 @@ function LoginContent() {
 
         setIsLoggedIn(true)
 
-        // Redirect based on user type
+        // Redirect based on selected user type
         if (userType === "consumer") {
           router.push("/profile")
-        } else {
+        } else if (userType === "farmer") {
           router.push("/farmer")
         }
       } else {
@@ -104,9 +106,9 @@ function LoginContent() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Tabs defaultValue="user" onValueChange={setUserType}>
+              <Tabs defaultValue="consumer" onValueChange={handleUserTypeChange} value={userType}>
                 <TabsList className="grid w-full grid-cols-2 mb-6">
-                  <TabsTrigger value="user">Consumer</TabsTrigger>
+                  <TabsTrigger value="consumer">Consumer</TabsTrigger>
                   <TabsTrigger value="farmer">Farmer</TabsTrigger>
                 </TabsList>
 
@@ -193,7 +195,7 @@ function LoginContent() {
       </div>
 
       {/* Login Prompt Modal */}
-      {showLoginPrompt && (
+      {showLoginPrompt && !isLoggedIn && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md w-full p-6">
             <h3 className="text-xl font-bold mb-2">Login to Continue</h3>

@@ -1,0 +1,142 @@
+# Agriculture Assistant Project Documentation
+
+## Project Overview
+Agriculture Assistant is a comprehensive web platform designed to connect farmers with consumers, provide agricultural resources, and streamline farming operations. The platform is built using modern web technologies including React, Next.js, and a MySQL database.
+
+## Key Features
+
+### 1. User Management
+- Multi-role system (User, Farmer, Admin)
+- Secure authentication and authorization
+- User profiles with personal information
+- Farmer verification system
+
+### 2. Marketplace Features
+- Product listing and management
+- Shopping cart functionality
+- Order tracking system
+- Secure payment integration
+- Price alerts for products
+- Wishlist management
+
+### 3. Equipment Rental System
+- Equipment listing and booking
+- Rental period management
+- Equipment availability tracking
+- Rental payment processing
+
+### 4. Market Intelligence
+- Real-time market prices
+- Price trend analysis
+- Crop price forecasting
+- Market insights and reports
+
+### 5. Farmer Support
+- Farm profile management
+- Product inventory management
+- Order fulfillment system
+- Payment processing and tracking
+- Verification system for farmers
+
+### 6. News and Information
+- Agricultural news updates
+- Government scheme information
+- Weather updates
+- Farming tips and guides
+
+### 7. Transaction Management
+- Multiple payment methods (COD, Online, UPI)
+- Transaction history
+- Payment status tracking
+- Refund processing
+
+## Technical Architecture
+
+### Frontend
+- Framework: Next.js with React
+- UI Components: Custom UI components
+- State Management: React Hooks
+- Styling: Tailwind CSS, Bootstrap
+
+### Backend
+- Database: MySQL
+- Authentication: Token-based authentication
+- File Storage: Local storage with image optimization
+- API Integration: RESTful APIs
+
+### Database Schema
+1. Users Table
+   - Basic user information
+   - Authentication details
+   - Role management
+
+2. Farmers Table
+   - Farm details
+   - Verification status
+   - Banking information
+
+3. Products Table
+   - Product information
+   - Pricing
+   - Inventory management
+
+4. Orders Table
+   - Order processing
+   - Shipping details
+   - Payment tracking
+
+5. Equipment Table
+   - Equipment details
+   - Rental information
+   - Availability status
+
+6. Market Prices Table
+   - Real-time price updates
+   - Historical price data
+   - Price trends
+
+## Website Flow
+
+1. User Journey
+   ```
+   Registration/Login → Browse Products → Add to Cart → Checkout → Order Tracking
+   ```
+
+2. Farmer Journey
+   ```
+   Registration → Verification → Add Products → Manage Orders → Process Payments
+   ```
+
+3. Equipment Rental Flow
+   ```
+   Browse Equipment → Check Availability → Book Equipment → Make Payment → Use Equipment
+   ```
+
+4. Market Price Flow
+   ```
+   Select Category → View Prices → Set Price Alerts → Receive Notifications
+   ```
+
+## Security Features
+- Password protection
+- Token-based authentication
+- Role-based access control
+- Secure payment processing
+- Data encryption
+
+## Future Enhancements
+1. Mobile application development
+2. AI-powered crop recommendations
+3. Integration with weather APIs
+4. Advanced analytics dashboard
+5. Community forum implementation
+6. Multi-language support
+
+## Technical Requirements
+- Node.js
+- MySQL Database
+- Modern web browser
+- Internet connectivity
+- Storage for images and documents
+
+This documentation provides an overview of the Agriculture Assistant project. For detailed implementation guides, API documentation, or specific feature documentation, please refer to the respective technical documentation files.

@@ -46,9 +46,17 @@ const FARMERS: Record<string, Farmer> = {
     address: "789 Mango Orchard, Ratnagiri, Maharashtra",
     image: "/placeholder.svg?height=100&width=100&text=SD",
   },
+  "Unknown Farmer": {
+    id: 999,
+    name: "Unknown Farmer",
+    phone: "Contact store",
+    email: "info@farmmarket.com",
+    address: "Farm Market HQ",
+    image: "/placeholder.svg?height=100&width=100&text=?",
+  },
 }
 
-                                                                                    export default function CartPage() {
+export default function CartPage() {
   const router = useRouter()
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -64,8 +72,44 @@ const FARMERS: Record<string, Farmer> = {
     setIsLoggedIn(!!token)
 
     if (token) {
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]")
-      setCartItems(cart)
+      try {
+        const cartData = localStorage.getItem("cart")
+        if (!cartData) {
+          setCartItems([])
+          return
+        }
+
+        const cart = JSON.parse(cartData)
+        if (!Array.isArray(cart)) {
+          console.error("Cart data is not an array")
+          setCartItems([])
+          return
+        }
+
+        // Ensure all cart items have required properties and are valid
+        const validatedCart = cart
+          .filter((item): item is CartItem => {
+            if (!item || typeof item !== 'object') return false
+            if (!item.id || !item.name || typeof item.price !== 'number') return false
+            return true
+          })
+          .map((item) => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity || 1,
+            farmer: item.farmer || "Unknown Farmer",
+            image: item.image || `/placeholder.svg?height=100&width=100&text=${item.name.charAt(0)}`
+          }))
+
+        setCartItems(validatedCart)
+        // Update localStorage with validated cart items
+        localStorage.setItem("cart", JSON.stringify(validatedCart))
+      } catch (error) {
+        console.error("Error loading cart:", error)
+        setCartItems([])
+        localStorage.setItem("cart", "[]")
+      }
     }
   }, [])
 
@@ -99,8 +143,17 @@ const FARMERS: Record<string, Farmer> = {
     }
 
     // Get unique farmers from cart items
-    const farmers = [...new Set(cartItems.map((item) => item.farmer))].map((farmerName) => {
-      return FARMERS[farmerName]
+    const uniqueFarmerNames = [...new Set(cartItems.map((item) => item.farmer))]
+    const farmers = uniqueFarmerNames.map((farmerName) => {
+      // Make sure to handle cases where farmer name doesn't exist in FARMERS object
+      return FARMERS[farmerName] || {
+        id: 999,
+        name: farmerName,
+        phone: "Contact store",
+        email: "info@farmmarket.com",
+        address: "Farm Market HQ",
+        image: `/placeholder.svg?height=100&width=100&text=${farmerName.charAt(0)}`,
+      }
     })
 
     setCheckoutFarmers(farmers)
@@ -190,10 +243,15 @@ const FARMERS: Record<string, Farmer> = {
               <Card>
                 <CardContent className="p-6">
                   <div className="space-y-6">
-                    {cartItems.map((item) => (
+                    {Array.isArray(cartItems) && cartItems.map((item) => item && (
                       <div key={item.id} className="flex gap-4 py-4 border-b last:border-b-0">
                         <div className="relative h-20 w-20 rounded-md overflow-hidden flex-shrink-0">
-                          <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-cover" />
+                          <Image 
+                            src={item.image || `/placeholder.svg?height=100&width=100&text=${item.name.charAt(0)}`} 
+                            alt={item.name} 
+                            fill 
+                            className="object-cover" 
+                          />
                         </div>
                         <div className="flex-1">
                           <div className="flex justify-between">
@@ -312,7 +370,7 @@ const FARMERS: Record<string, Farmer> = {
               <div key={farmer.id} className="border rounded-lg p-4">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="relative h-12 w-12 rounded-full overflow-hidden">
-                    <Image src={farmer.image || "/placeholder.svg"} alt={farmer.name} fill className="object-cover" />
+                    <Image src={farmer.image} alt={farmer.name} fill className="object-cover" />
                   </div>
                   <div>
                     <div className="font-medium">{farmer.name}</div>

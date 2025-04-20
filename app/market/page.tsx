@@ -33,7 +33,7 @@ const CROPS = [
     unit: "kg",
     location: "Thane, Maharashtra",
     quantity: 500,
-    image: "/rice.jpeg?height=300&width=300&text=Rice",
+    image: "https://pramoda.co.in/wp-content/uploads/2018/12/rice_banner.jpg?height=300&width=300&text=Rice",
     description:
       "Premium quality organic rice grown without pesticides. Rich in nutrients and perfect for daily consumption.",
     farmer: {
@@ -59,7 +59,7 @@ const CROPS = [
     unit: "kg",
     location: "Pune, Maharashtra",
     quantity: 200,
-    image: "/placeholder.svg?height=300&width=300&text=Tomatoes",
+    image: "https://5.imimg.com/data5/SELLER/Default/2022/3/RV/WK/TD/119138440/fresh-tomato-1000x1000.jpeg?height=300&width=300&text=Tomatoes",
     description: "Juicy and ripe tomatoes freshly harvested from our farm. Perfect for salads and cooking.",
     farmer: {
       id: 102,
@@ -78,13 +78,13 @@ const CROPS = [
   },
   {
     id: 3,
-    name: "Alphonso Mangoes",
+    name: "Hafu's Mangoes",
     category: "Fruits",
     price: 400,
     unit: "dozen",
     location: "Ratnagiri, Maharashtra",
     quantity: 100,
-    image: "/placeholder.svg?height=300&width=300&text=Mangoes",
+    image: "https://5.imimg.com/data5/SELLER/Default/2021/3/YG/IF/PY/77590722/hapus-mango-plant-contract-farming-service-500x500.jpg?height=300&width=300&text=Mangoes",
     description: "Premium Alphonso mangoes known for their sweetness and aroma. Directly from Ratnagiri farms.",
     farmer: {
       id: 103,
@@ -109,7 +109,7 @@ const CROPS = [
     unit: "kg",
     location: "Nashik, Maharashtra",
     quantity: 1000,
-    image: "/wheat.png?height=300&width=300&text=Wheat",
+    image: "https://5.imimg.com/data5/SELLER/Default/2021/4/MM/NU/OC/119588724/new-product-500x500.jpeg?height=300&width=300&text=Wheat",
     description: "High-quality organic wheat, perfect for making chapatis, bread, and other baked goods.",
     farmer: {
       id: 104,
@@ -134,7 +134,7 @@ const CROPS = [
     unit: "kg",
     location: "Kolhapur, Maharashtra",
     quantity: 300,
-    image: "/placeholder.svg?height=300&width=300&text=Potatoes",
+    image: "https://tiimg.tistatic.com/fp/1/006/410/indian-origin-fresh-potato-799.jpg?height=300&width=300&text=Potatoes",
     description: "Fresh and clean potatoes, perfect for various dishes. Grown using sustainable farming practices.",
     farmer: {
       id: 105,
@@ -159,7 +159,7 @@ const CROPS = [
     unit: "dozen",
     location: "Solapur, Maharashtra",
     quantity: 150,
-    image: "/placeholder.svg?height=300&width=300&text=Bananas",
+    image: "https://ychef.files.bbci.co.uk/976x549/p08xcsy8.jpg?height=300&width=300&text=Bananas",
     description: "Organically grown bananas, rich in potassium and other nutrients. Perfect for a healthy snack.",
     farmer: {
       id: 106,
@@ -184,7 +184,7 @@ const CROPS = [
     unit: "kg",
     location: "Nashik, Maharashtra",
     quantity: 400,
-    image: "/placeholder.svg?height=300&width=300&text=Onions",
+    image: "https://5.imimg.com/data5/UR/XH/JN/SELLER-6048321/fb-img-1584446791988.jpg?height=300&width=300&text=Onions",
     description: "Fresh red onions with a strong flavor, perfect for adding taste to your dishes.",
     farmer: {
       id: 107,
@@ -209,7 +209,7 @@ const CROPS = [
     unit: "kg",
     location: "Shimla, Himachal Pradesh",
     quantity: 100,
-    image: "/placeholder.svg?height=300&width=300&text=Apples",
+    image: "https://5.imimg.com/data5/VI/NC/MY-34355602/fresh-apples-500x500.png?height=300&width=300&text=Apples",
     description: "Fresh and juicy apples from the hills of Himachal Pradesh. Rich in fiber and antioxidants.",
     farmer: {
       id: 108,
@@ -234,7 +234,7 @@ const CROPS = [
     unit: "kg",
     location: "Sangli, Maharashtra",
     quantity: 50,
-    image: "/placeholder.svg?height=300&width=300&text=Turmeric",
+    image: "https://www.csp.indica.in/wp-content/uploads/2021/04/Photo-from-Aparna-M-Sridhar-4.jpg?height=300&width=300&text=Turmeric",
     description: "High-quality organic turmeric with rich color and aroma. Perfect for cooking and medicinal purposes.",
     farmer: {
       id: 109,
@@ -259,7 +259,7 @@ const CROPS = [
     unit: "piece",
     location: "Ratnagiri, Maharashtra",
     quantity: 200,
-    image: "/placeholder.svg?height=300&width=300&text=Coconuts",
+    image: "https://5.imimg.com/data5/XE/IU/MY-35376720/coconut-500x500.jpg?height=300&width=300&text=Coconuts",
     description: "Fresh coconuts with sweet water and tender meat. Directly from coastal farms.",
     farmer: {
       id: 110,

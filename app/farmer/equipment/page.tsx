@@ -54,7 +54,7 @@ const EQUIPMENT: EquipmentItem[] = [
   {
     id: 1,
     name: "Tractor",
-    image: "/placeholder.svg?height=200&width=300&text=Tractor",
+    image: "https://www.deere.co.in/assets/images/region-1/products/tractors/d-series-tractors/john-deere-india-d-series-tractors.jpg?height=200&width=300&text=Tractor",
     price: 1500,
     unit: "day",
     location: "Mumbai, Maharashtra",
@@ -71,7 +71,7 @@ const EQUIPMENT: EquipmentItem[] = [
   {
     id: 2,
     name: "Harvester",
-    image: "/placeholder.svg?height=200&width=300&text=Harvester",
+    image: "https://i.ytimg.com/vi/BSXklwAEkls/maxresdefault.jpg?height=200&width=300&text=Harvester",
     price: 2500,
     unit: "day",
     location: "Pune, Maharashtra",
@@ -88,7 +88,7 @@ const EQUIPMENT: EquipmentItem[] = [
   {
     id: 3,
     name: "Rotavator",
-    image: "/placeholder.svg?height=200&width=300&text=Rotavator",
+    image: "https://2.wlimg.com/product_images/bc-full/dir_27/788457/agricultural-rotavator-1527670550-1562021.jpeg?height=200&width=300&text=Rotavator",
     price: 800,
     unit: "day",
     location: "Nashik, Maharashtra",
@@ -105,7 +105,7 @@ const EQUIPMENT: EquipmentItem[] = [
   {
     id: 4,
     name: "Seed Drill",
-    image: "/placeholder.svg?height=200&width=300&text=Seed Drill",
+    image: "https://i.pinimg.com/originals/b0/37/2f/b0372fcced1e27bfb115cba00f5ced4e.jpg?height=200&width=300&text=Seed Drill",
     price: 600,
     unit: "day",
     location: "Thane, Maharashtra",
@@ -122,7 +122,7 @@ const EQUIPMENT: EquipmentItem[] = [
   {
     id: 5,
     name: "Water Pump",
-    image: "/placeholder.svg?height=200&width=300&text=Water Pump",
+    image: "https://pixelmags.com/wp-content/uploads/2023/08/Untitled-design-2023-08-04T051327.114.jpg?height=200&width=300&text=Water Pump",
     price: 300,
     unit: "day",
     location: "Kolhapur, Maharashtra",
@@ -139,7 +139,7 @@ const EQUIPMENT: EquipmentItem[] = [
   {
     id: 6,
     name: "Sprayer",
-    image: "/placeholder.svg?height=200&width=300&text=Sprayer",
+    image: "https://khetigaadi.com/blog/wp-content/uploads/2021/11/MicrosoftTeams-image-2022-02-12T152547.961.jpg?height=200&width=300&text=Sprayer",
     price: 200,
     unit: "day",
     location: "Nagpur, Maharashtra",
@@ -670,7 +670,7 @@ export default function EquipmentPage() {
               </div>
               <div className="flex justify-between items-center font-bold text-lg mt-2">
                 <span>Total Amount:</span>
-                <span>₹{selectedEquipment?.price * rentDays}</span>
+                <span>₹{selectedEquipment ? (selectedEquipment.price * rentDays) : 0}</span>
               </div>
             </div>
           </div>

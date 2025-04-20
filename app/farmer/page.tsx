@@ -2,7 +2,8 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import MainLayout from "@/components/main-layout"
@@ -16,12 +17,30 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Upload, Calendar, MapPin, Tractor, ShoppingBag, ArrowRight } from "lucide-react"
 
 export default function FarmerPage() {
+  const router = useRouter()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userType, setUserType] = useState<string | null>(null)
   const [cropImages, setCropImages] = useState<File[]>([])
   const [cropName, setCropName] = useState("")
   const [cropCategory, setCropCategory] = useState("")
   const [cropPrice, setCropPrice] = useState("")
   const [cropQuantity, setCropQuantity] = useState("")
   const [cropDescription, setCropDescription] = useState("")
+
+  useEffect(() => {
+    // Check if user is logged in
+    const authToken = localStorage.getItem("auth-token")
+    const storedUserType = localStorage.getItem("userType")
+    const userData = localStorage.getItem("user-data")
+
+    if (!authToken || !userData || storedUserType !== "farmer") {
+      router.push("/login")
+      return
+    }
+
+    setIsLoggedIn(true)
+    setUserType(storedUserType)
+  }, [])
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -52,6 +71,10 @@ export default function FarmerPage() {
 
     // Show success message or redirect
     alert("Crop listed successfully!")
+  }
+
+  if (!isLoggedIn) {
+    return null; // Or you could show a loading state here
   }
 
   return (
